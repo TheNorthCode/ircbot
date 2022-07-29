@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 
@@ -8,19 +9,31 @@ import (
 	"github.com/mpgelliston/ircbot/bot"
 )
 
+var portFlag = flag.Int("P", 6667, "The port on which to connect the IRC server")
+
+var verboseFlag = flag.Bool("v", false, "Verbose logging")
+var debugFlag = flag.Bool("d", false, "Debug logging, if this is set the -v flag is ignored")
+
+var nickFlag = flag.String("n", "NorthBot", "The NICK which the bot will assume")
+var serverFlag = flag.String("s", "irc.libera.chat", "The IRC server URL")
+var passFlag = flag.String("p", "", "The user password of the bot")
+var chanFlag = flag.String("c", "", "The channel to connect to on the server")
+
 func main() {
+	flag.Parse()
+
 	fmt.Println("Configuring IRC Bot...")
 	options := bot.BotOptions{
-		Nick:     "NorthBot",
+		Nick:     *nickFlag,
 		User:     "NorthBot",
 		Name:     "NorthBot",
-		Password: "MAGA2024",
-		Server:   "irc.libera.chat",
-		Port:     6667,
-		Channel:  "#testnorthbot",
+		Password: *passFlag,
+		Server:   *serverFlag,
+		Port:     *portFlag,
+		Channel:  *chanFlag,
 		Admins:   map[string]bool{"matt1982": true, "lux0r": true, "mrbalihai": true},
-		Debug:    true,
-		Verbose:  true,
+		Debug:    *debugFlag,
+		Verbose:  *verboseFlag,
 	}
 
 	fmt.Println("Starting IRC Bot")
